@@ -7,7 +7,7 @@ OSNAME=`uname -s`
 
 start_proxy() {
 echo Compiling...
-g++ -Wall -o exe/xMain src/xMain.cpp src/Forw/interface.cpp src/Forw/forwarder.cpp src/Forw/packet.cpp src/Forw/path.cpp src/Forw/router.cpp src/Prob/p_agent.cpp src/Prob/p_forwarder.cpp src/Prob/p_packet.cpp -pthread -std=c++11
+g++ -Wall -o exe/xMain src/xMain.cpp src/Data/d_interface.cpp src/Data/d_forwarder.cpp src/Data/d_packet.cpp src/Data/d_path.cpp src/router.cpp src/Prob/p_agent.cpp src/Prob/p_forwarder.cpp src/Prob/p_packet.cpp -pthread -std=c++11
 exe/xMain
 }
 
