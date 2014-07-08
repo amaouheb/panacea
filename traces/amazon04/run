@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for fichier in 'ls'
+do 
+	if [`wc -l fichier`=  `grep "5 received" amazon06.log | wc -l`]
+	then echo "aucune erreur" >> resultats.log   
+
+done

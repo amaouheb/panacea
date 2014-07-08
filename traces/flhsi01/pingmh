@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# This script pings multiple hosts and store rtt values in log files
+# The script takes into input a file with ip or host name addresses (pingable ones)
+# The output of the script is a seperate log file for each ip or host name address
+# Both input ip_address_file and .log files are stored in the same directory as the script
+
+# pings are 5 packets each five minutes
+# The script should run for one week
+
+# The file with the IP addresses
+IP_FILE="./ip-destinations"
+
+# check if the file exists
+if [[ ! -f ${IP_FILE} ]]; then
+   echo "No File!"
+   exit 1
+fi
+
+# One week contains 2016 periods of five minutes
+# The script will the run until 2016 periods of 5 minutes have been reached
+# Notice that the ping time is not included so for sure, depending on the number of hosts to be pinged, the total time of the script execution will be more than a week
+
+
+i=0
+while [ $i -ne 5040 ] ; do #replace with 5040 for one week
+
+	for IP_ADDRESS in $(cat $IP_FILE); do
+	   #echo "Ping for ${IP_ADDRESS}"
+	   # The -c 5 means send cinq packets
+           ping=`ping -c 5 ${IP_ADDRESS} | grep -e rtt -e loss | tr '\n' ' '`;
+           date=`date +"%y/%m/%d-%H:%M:%S"`;
+           echo $date - $ping >> ${IP_ADDRESS}.log
+           sleep 1
+	done
+	#sleep 1  # replace with 120 for 2 minutes
+	i=$(($i + 1))
+done
+
