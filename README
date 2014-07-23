@@ -1,0 +1,15 @@
+----------------------------------
+23-06-2014
+----------------------------------
+
+
+Toutes les fonctionnalités de la solution ont été testées sur EMULAB avec des adresse publiques
+Au niveau de la racine de chaque dossier le scripte d'exécution est nommé run.sh
+Le fichier topologie doit etre configurer avant de lancer le script
+NB : Les destination doivent etre declarées au niveau du exe/destinations
+
+Chaque dossier précise par son nom le type de programme :
+
+	- vm source      : programme d'interception des paquets
+	- proxy          : ensemble des noeuds du réseau overlay & fonction de désencapsulation
+
