@@ -1,0 +1,80 @@
+Abstract. The very nature of implementing and evaluating fully distributed algorithms or protocols in application-layeroverlay networks involves certain programming tasks that are at best mundane and tedious — and at worst challenging— even at the application level. These include multi-threaded message switching engines at the application layer, failuredetections and reactions, measurements of QoS metrics such as loss rates and per-link throughput, applicationdeploy-ment and terminations, debugging and monitoring facilities, virtualizing distributed nodes, as well as emulatingresourcebottlenecks and asymmetric network connections. Unfortunately, such a significant set of programming tasks isinevitablewhen implementing a diverse variety of application-layer overlayprotocols and algorithms.In this paper, we present iOverlay, a lightweight and high-performance middleware infrastructure thataddresses theseproblems in a novel way by providing clean, welldocumented layers of middleware components. The interface betweeniOverlay and overlay applications is designed aazeazzeazezezaeazerggpldfglkdfgodkfglgklkgmldfgdfrtertertetelmùertpoekgedfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfgdfghggfgdfgdfgdfgdfgmpopouaaapaaqfjsfjkfsfhfjsdfjhsdfhjkdhjhjhjhjhjhjhjhkjhkjhkjhkjhsqdqsdqsdqsdqsdqsdqsdqsdqsdqsdqsdqsdqsdeeeeefefefefefefeffeefefefgegeeegegegegeehghjgjghjhgjghjgjghjghjghjaaaaefghgfhfghabbbbcccczerzerzerzrzerzerzerzrzerzezezezerzezerzeaaaabbbbcccccaa
+parce que 
+Version testée sur amazon 17-07-2014
+------------------------------------
+
+
+Dossier exe :
+------------------------------------
+
+Le fichier myip doit contenir l'adresse ip publique de la machine qui execute le programme proxy. 
+Le fichier nodes doit contenir la liste des adresses ip publiques de tous les noeuds SAUF celle du proxy executant le programme (proxy source). 
+Le fichier destinations doir contenir la liste des destinations possibles (les mesures vont etre faites vers ces destinations).
+
+exemple
+------------------------------------
+
+myip :
+54.210.47.104
+
+nodes :
+54.186.16.186
+54.173.93.144
+54.196.93.540
+54.173.53.425
+
+destinations :
+54.173.93.144
+54.196.93.540
+
+
+Mode de depoiement:
+------------------------------------
+
+Remplir les fichiers comme indiqué ci-dessus, puis executer le script run
+
+
+Vitesse de traitement:
+------------------------------------
+
+Le traitement de 100 paquets nous coute 60 millisecondes
+Soit 0.6 millisecond par paquet
+
+
+Droit
+------------------------------------
+Le programme ne necessite PAS de droits admin pour son exection
+
+Problèmes du routage BGP (routage entre les AS) 
+
+vitesse de convergence (protocole lent) : slow link failure recovery
+
+figure des durées max de pannes (histogramme)
+=> plus de 21% des liens tombent en panne plus de 4 min et plus de 7% sont en panne pendant 14 min. 
+
+
+Equilibrage de charge et asymétrie : Inability to detect performance failure
+ 
+BGP ne dispose pas d'un système d'équilibrage de la charge entre plusieurs liens et ne tient pas compte de la congestion éventuelle des liens : si un AS est connecté à plusieurs fournisseurs de transit vers Internet, il se peut que certains soient congestionnés tandis que d'autres sont peu utilisés. Tant que le lien n'est pa considéré en panne il sera utilisé même s'il est trop innondé ou trop congestionné.
+
+Figure de rtts (choisir des rtts avec une grande distribution )
+=> Même si l'écart type est parfois très important le protocole ne réagit pas en exploitant d'autres chemins ce qui augemente le taux de pertes.
+
+Figure des pannes  
+=> plus de 1% des liens en moyenne sont en panne sur toute la durée de l'expérience.  En outre, plus  de 5% des liens sont en panne sur des périodes critiques durant plus d'une heure au total.
+
+Amélioration des performances pour la latence 
+
+Les problèmes du routage BGP exposés précédemment peuvent être améliorer en utilisant les réseaux overlay. Le but étant, en cas de retarde ou de panne dans le chemin direct, de  rediriger les paquets en utilisant tous les noeuds possibles du réseau.  
+
+Figure des pourcentages des plus courts chemins:
+=> En étudiant le plus court chemin durant la durée de l'expérience, il s'avère que plus de 38% en moyenne des chemins les plus courts ne sont pas directs. En conséquant, le fait de basculer vers le plus court chemin apporterait une amélioration considérable.
+
+Figure des gains en pourcentage (moyen et max)
+=>  En effet on constate qu'en choisissant le plus court chemin, le gain moyen par lien dépasse 11% et peut atteindre au maximum 76% par lien.
+
+Il est donc nécessaire de surveiller les liens virtuels pour déduire les tables de routage des meilleurs chemins. Cependant pour savoir s'il est nécessaire de surveiller tous les chemins à chaque mesure de qualité, on s'intéresse aux changements du plus court chemin. 
+
+Figure des pourcentages changements en fct du temp (hisotgramme)
+=> si on fixe un gain seuil à 5% on constate qu' en moyenne seul 1% des chemins changent toutes le 2min, donc on peut supposer qu'une examination périodique de certains chemins peut être suffisante pour atteindre des performances considérables. Ceci en essayant de garder un routage stable et d'éviter les oscillations rapides des routes. 
+
