@@ -1,0 +1,7 @@
+Pour acceder à une instance sur amazon:
+
+1- recuperer l'IP de la machine
+2- recuperer la clé correspondante location.pem
+3- proteger les clés : chmod 400 location.pem
+4- ssh -i location.pem ubuntu@addressip
+
